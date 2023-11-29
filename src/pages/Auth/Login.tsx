@@ -1,124 +1,141 @@
-import { Alert, Button, Stack} from "@mui/material";
-import { Formik, Form, Field, ErrorMessage } from "formik"
-import { Link } from "react-router-dom";
+import {
+  TextField,
+  Box,
+  Typography,
+  Button,
+  FormControlLabel,
+  Checkbox
+} from "@mui/material"
 
-// ICONS
-import EmailIcon from '@mui/icons-material/Email';
-import PasswordIcon from '@mui/icons-material/Password';
-import Title from "../../components/LoginRouting/Title";
-import Nav from "../../components/LoginRouting/Nav";
+import * as yup from 'yup'
+import { useFormik } from "formik"
+import { Link } from 'react-router-dom'
+import Nav from "../../components/LoginArea/Nav"
+import { useState } from "react"
+
+
+// VALIDATION SCHEMA
+
+const SignInSchema = yup.object().shape({
+
+  email: yup.string()
+    .email("The email is not valid")
+    .required("The email is required"),
+
+  password: yup.string()
+    .min(6, "The password must have 6 characters")
+    .required("The password is required")
+
+});
 
 export default function Login() {
+
+  const [checked, setChecked] = useState(Boolean(localStorage.getItem("RememberEmail")) ?? false);
+
+  const [Email, setEmail] = useState(localStorage.getItem("RememberEmail") ?? "");
+
+  const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    setChecked(e.target.checked);
+
+    // if the user uncheck
+
+    if (!checked) {
+      localStorage.removeItem("RememberEmail");
+    }
+  }
+  // FORMIK
+
+  const formik = useFormik({
+
+    initialValues: {
+      email: Email,
+      password: ""
+    },
+
+    validationSchema: SignInSchema,
+
+    // 
+    onSubmit: (values) => {
+
+
+      if (checked) {
+        localStorage.setItem("RememberEmail", values.email);
+      }
+    }
+  })
   return (
     <>
+      <Typography className="text-center" component="h1" variant="h5">  Sign in </Typography>
 
-      <Formik
-        onSubmit={() => {
-          console.log("SENDING");
-        }}
+      <Box component="form"  onSubmit={formik.handleSubmit}>
 
-        initialValues={{
-          email: "",
-          password: ""
-        }}
+        <TextField
+          margin="normal"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={Boolean(formik.errors.email) && formik.touched.email}
+          helperText={formik.touched.email && formik.errors.email}
+          required
+          fullWidth
+          label="Email"
+          name="email"
+        />
+        
+         {/* password */}
 
-        validate={() => {
+        <TextField
+          margin="normal"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+        />
 
-          let errors: { email: String, password: String } = { email: "", password: "" };
+        {/* checkbox  */}
 
-          errors.email = "The email is invalid";
-          errors.password = "The password is invalid";
-          
-          return errors;
+        <div className="mt-4 flex flex-col gap-4">
 
-        }}
-      >
-        {({ errors }) => (
-          <>
-            {/* Errors` */}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={checked}
+                onChange={handleChecked} value="remember" color="success" />
+            }
+            label="Remember me"
+          />
 
-            <Stack spacing={1} className="my-2 absolute w-ful">
+          <Button
+            variant="contained"
+            type="submit"
+            color="success"
+            size="large">Sign in</Button>
 
-              <ErrorMessage name="email" component={() => (
-                <Alert >{errors.email}</Alert>
-              )} />
+        </div>
+      </Box>
 
-              <ErrorMessage name="password" component={() => (
-                <Alert variant="filled" severity="error">{errors.password}</Alert>
-              )} />
+      {/* navegation  */}
 
-            </Stack>
+      <Nav>
 
-            {/* Avatar  */}
+        <Link to="/NewAccount" className="border-b-2 pb-2 border-black hover:text-lime-600">
+          You dont have an account?
+        </Link>
 
-            <Form>
+        <Link to="/Forgot-Password" className="border-b-2 pb-2 border-black hover:text-lime-600">
+          Forgot my password
+        </Link>
 
-              {<Title title={"Welcome"} />}
-
-              <Stack spacing={1}>
-
-                <label className="text-bold uppercase" htmlFor="email">Email</label>
-
-                <div className="w-full flex  border-azure-radiance-800 border p-2">
-
-                  <EmailIcon />
-
-                  <Field
-                    type="email"
-                    name="email"
-                    placeholder="Your email"
-                    className="px-4 outline-none bg-transparent w-full"
-                  />
-
-                </div>
-              </Stack>
-
-              {/* Passowrd */}
-
-              <Stack sx={{ marginTop: "10px", marginBottom: "10px" }} spacing={1}>
-
-                <label className="text-bold uppercase" htmlFor="Password">Password</label>
-
-                <div className="w-full flex  border-azure-radiance-800 border p-2 ">
-
-                  <PasswordIcon />
-
-                  <Field
-                    type="password"
-                    name="password"
-                    placeholder="Your password"
-                    className="px-4 outline-none bg-transparent w-full"
-                  />
-
-                </div>
-              </Stack>
-
-              <Button
-                variant="contained"
-                type="submit"
-                color="success"
-                size="large"
-                sx={{
-                  width: "50%",
-                }}
-              >Log In</Button>
-            </Form>
-
-            {/*  Navegation */}
-
-            <Nav>
-
-              <Link to="/NewAccount" className="border-b-2 pb-2 border-black hover:text-lime-600">
-                Create a new account
-              </Link>
-
-              <Link to="/Forgot-Password" className="border-b-2 pb-2 border-black hover:text-lime-600">
-                Forgot my password
-              </Link>
-            </Nav>
-          </>
-        )}
-      </Formik>
+      </Nav>
     </>
   )
 }

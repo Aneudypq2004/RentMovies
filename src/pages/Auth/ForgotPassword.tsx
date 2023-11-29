@@ -1,16 +1,23 @@
 import { TextField, Stack, Button } from "@mui/material";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
-import Title from "../../components/LoginRouting/Title";
-import Nav from "../../components/LoginRouting/Nav";
+import Title from "../../components/LoginArea/Title";
+import Nav from "../../components/LoginArea/Nav";
+import * as yup from 'yup'
 
 export default function ForgotPassword() {
+
+  const ForgotSchema = yup.object().shape({
+    email: yup.string().email("The email is not valid").required("The email is required")
+  });
 
   const formik = useFormik({
 
     initialValues: {
       email: "",
     },
+
+    validationSchema: ForgotSchema,
 
     onSubmit: (values) => {
 
@@ -31,8 +38,11 @@ export default function ForgotPassword() {
             name="email"
             fullWidth
             label="Email"
+            error={Boolean(formik.errors.email) && formik.touched.email}
+            helperText={ formik.touched.email && formik.errors.email}
             value={formik.values.email}
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             type="email" />
 
           <Button
@@ -49,7 +59,7 @@ export default function ForgotPassword() {
 
       <Nav>
 
-        <Link to="/NewAccount" className="border-b-2 pb-2 border-black  hover:text-lime-600">
+        <Link to="/login" className="border-b-2 pb-2 border-black  hover:text-lime-600">
           Log in
         </Link>
 

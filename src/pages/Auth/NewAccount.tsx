@@ -1,8 +1,36 @@
-import { TextField, Stack, Button } from "@mui/material";
+import { TextField, Stack, Button} from "@mui/material";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
-import Title from "../../components/LoginRouting/Title";
-import Nav from "../../components/LoginRouting/Nav";
+import Title from "../../components/LoginArea/Title";
+import Nav from "../../components/LoginArea/Nav";
+import * as yup from 'yup'
+
+const newAccountSchema = yup.object().shape({
+  name: yup.string()
+    .required("The name is required"),
+
+  lastName: yup.string()
+    .required("The last name is required"),
+
+  email: yup.string()
+    .email("The email is not valid")
+    .required("The email is required"),
+
+  password: yup.string()
+    .min(6, "The password must have at least 6 characters")
+    .required("The password is required"),
+
+  repeatPassword: yup.string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .required('Please confirm your password'),
+
+  UserName: yup.string()
+    .required("The username is required"),
+
+  birthdayDate: yup.string()
+    .required("The birthday date is required")
+});
+
 
 export default function NewAccount() {
 
@@ -18,21 +46,12 @@ export default function NewAccount() {
       birthdayDate: "",
     },
 
-    validate: (values) => {
-
-      console.log(values)
-      
-
-
-      return {
-        email : "El email no es valido"
-      }
-
-    },
+    validationSchema: newAccountSchema,
 
     onSubmit: (values) => {
 
       console.log(values)
+
 
     }
   });
@@ -44,7 +63,7 @@ export default function NewAccount() {
 
         <fieldset>
 
-          {<Title title="Create a new account" />}
+          <Title title="Create a new account" />
 
           <Stack spacing={4}>
 
@@ -56,7 +75,10 @@ export default function NewAccount() {
               fullWidth
               label="User Name"
               value={formik.values.UserName}
+              onBlur={formik.handleBlur}
               onChange={formik.handleChange}
+              error={Boolean(formik.errors.UserName) && formik.touched.UserName}
+              helperText={formik.touched.UserName && formik.errors.UserName}
               type="text" />
 
 
@@ -69,8 +91,11 @@ export default function NewAccount() {
                 name="name"
                 fullWidth
                 label="Your Name"
+                error={Boolean(formik.errors.name) && formik.touched.name}
+                helperText={formik.touched.name && formik.errors.name}
                 value={formik.values.name}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 type="text" />
 
               {/* Last Name  */}
@@ -80,8 +105,11 @@ export default function NewAccount() {
                 name="lastName"
                 fullWidth
                 label="Last Name"
+                error={Boolean(formik.errors.lastName) && formik.touched.lastName}
+                helperText={formik.touched.lastName && formik.errors.lastName}
                 value={formik.values.lastName}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 type="text" />
 
             </Stack>
@@ -91,36 +119,43 @@ export default function NewAccount() {
             <input
               required
               className="border focus:outline-none border-gray-300 rounded-md p-4"
-              name="Date Birthday"
+              name="birthdayDate"
               value={formik.values.birthdayDate}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               type="Date" />
 
             {/* Email  */}
-
             <TextField
-              required
               name="email"
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && Boolean(formik.errors.email)}
               fullWidth
               label="Email"
+              error={Boolean(formik.errors.email) && formik.touched.email}
+              helperText={formik.touched.email && formik.errors.email}
               value={formik.values.email}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               type="email" />
 
             {/* Password  */}
 
             <TextField
-              required
-              name="password"
-              error={formik.touched.password}
-              helperText="No KDNJ"
-              fullWidth
-              label="Password"
+              margin="normal"
               value={formik.values.password}
               onChange={formik.handleChange}
-              type="password" />
+              onBlur={formik.handleBlur}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+
+            {/* repeat Password  */}
 
             <TextField
               required
@@ -129,6 +164,9 @@ export default function NewAccount() {
               label="Repeat Password"
               value={formik.values.repeatPassword}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.repeatPassword && Boolean(formik.errors.repeatPassword)}
+              helperText={formik.touched.repeatPassword && formik.errors.repeatPassword}
               type="password" />
 
             <Button
@@ -154,6 +192,7 @@ export default function NewAccount() {
         <Link to="/Forgot-Password" className="border-b-2 pb-2 border-black hover:text-lime-600">
           Forgot my password
         </Link>
+
       </Nav>
     </>
   )

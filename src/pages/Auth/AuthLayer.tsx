@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { Avatar} from "@mui/material";
-import PersonIcon from '@mui/icons-material/Person';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 export default function AuthLayer() {
   return (
@@ -13,7 +13,7 @@ export default function AuthLayer() {
             bgcolor: "#2e7d32", width: 60, height: 60, position: "absolute",
             top: "-30px", left: "calc(50% - 30px)"
           }}>
-          <PersonIcon fontSize="large" />
+          <LockOutlinedIcon  fontSize='large' />
 
         </Avatar>
         <Outlet />
