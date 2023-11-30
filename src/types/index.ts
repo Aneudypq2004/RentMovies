@@ -12,4 +12,11 @@ export type ICreateUser = {
     email: string;
     username: string;
     password: string;
+    birthday: string;
 }
+
+export type IChangePassword = {
+    password: string;
+    repeatPassword: String
+}
+

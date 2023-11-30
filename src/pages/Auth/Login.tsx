@@ -8,26 +8,12 @@ import {
   Alert
 } from "@mui/material"
 
-import * as yup from 'yup'
 import { useFormik } from "formik"
 import { Link } from 'react-router-dom'
 import Nav from "../../components/LoginArea/Nav"
 import { useState } from "react"
+import { SignInSchema } from "../../libs/schemas"
 
-
-// VALIDATION SCHEMA
-
-const SignInSchema = yup.object().shape({
-
-  email: yup.string()
-    .email("The email is not valid")
-    .required("The email is required"),
-
-  password: yup.string()
-    .min(6, "The password must have 6 characters")
-    .required("The password is required")
-
-});
 
 export default function Login() {
 

@@ -1,7 +1,19 @@
-import clientAxios from "../../config/ClientAxios";
-import { ICreateUser } from "../../types";
+import clientAxios from "../../libs/axios/ClientAxios";
+import { IChangePassword, ICreateUser } from "../../types";
 
-export const CreateAccount = async (newUser: ICreateUser) => {
+// ======= SIGN IN ==========
+
+export const SignInApi = async (obj: {email: string, password: string}) => {
+    try {
+        const { data } = await clientAxios.post("/login", obj);
+        return data;
+    } catch (error) {
+    }
+}
+
+// ===== CREATE ACCOUNT ======
+
+export const CreateAccountApi = async (newUser: ICreateUser) => {
     try {
 
         const { data } = await clientAxios.post("/register", {
@@ -17,11 +29,37 @@ export const CreateAccount = async (newUser: ICreateUser) => {
 
     }
 }
+// Confirm User
 
-export const ConfirmUser = async (token: String) => {
+export const ConfirmUserApi = async (token: String) => {
     try {
         const { data } = await clientAxios.patch(`/confirm/${token}`);
         return data;
     } catch (error) {
     }
 }
+
+// Change Password
+
+export const ChangePasswordApi = async (obj: IChangePassword, token: string) => {
+    try {
+        const { data } = await clientAxios.patch(`/change-password/${token}`, obj);
+        return data;
+    } catch (error) {
+    }
+}
+
+// FORGOT PASSWORD
+
+export const ForgotPasswordApi = async (email: string) => {
+    try {
+        const { data } = await clientAxios.post("/forgot-password", email);
+        return data;
+    } catch (error) {
+    }
+}
+
+
+
+
+

@@ -3,21 +3,16 @@ import { useFormik } from "formik";
 import { Link } from "react-router-dom";
 import Title from "../../components/LoginArea/Title";
 import Nav from "../../components/LoginArea/Nav";
-import * as yup from 'yup'
-
+import { ForgotPasswordSchema } from "../../libs/schemas";
 export default function ForgotPassword() {
-
-  const ForgotSchema = yup.object().shape({
-    email: yup.string().email("The email is not valid").required("The email is required")
-  });
-
+  
   const formik = useFormik({
 
     initialValues: {
       email: "",
     },
 
-    validationSchema: ForgotSchema,
+    validationSchema: ForgotPasswordSchema,
 
     onSubmit: (values) => {
 
