@@ -56,7 +56,7 @@ export default function Login() {
     <>
       <Typography className="text-center" component="h1" variant="h5">  Sign in </Typography>
 
-      <Alert variant="filled" color="success"  title={Email} />
+      {/* <Alert variant="filled" color="success"  title={Email} /> */}
 
       {/* FORM  */}
       

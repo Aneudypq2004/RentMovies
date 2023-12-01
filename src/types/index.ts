@@ -1,6 +1,4 @@
 
-
-
 export type ILoginUser = {
     email: String;
     password: String
