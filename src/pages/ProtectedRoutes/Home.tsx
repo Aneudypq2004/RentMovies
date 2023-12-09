@@ -33,7 +33,7 @@ export default function Home() {
         >
           {movies
             ? movies.map((movie) => (
-              <Box sx={{ height: "20rem", width: "20rem" }} key={movie.imdbID}>
+              <Box sx={{ height: "25rem", width: "20rem" }} key={movie.imdbID}>
                 <MovieCard movie={movie} card={false} />
               </Box>
             ))

@@ -17,7 +17,7 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import useMoviesStore from '../../store/MovieStore';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -100,7 +100,10 @@ export default function Header() {
     setMobileMoreAnchorEl(null);
   };
 
+  const navigate = useNavigate();
+
   const handleMenuClose = () => {
+    navigate("/");
     setAnchorEl(null);
     handleMobileMenuClose();
   };
@@ -196,7 +199,7 @@ export default function Header() {
         <Toolbar>
 
           <Link to="/home">
-            <h1>RentMovies</h1>
+            <h1 className='uppercase text-2xl text-second'>RentMovies</h1>
           </Link>
 
 
