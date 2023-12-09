@@ -9,10 +9,12 @@ export type Movie = {
   Poster: string;
 };
 
-export default function useMoviesData() {
+function useMoviesData() {
   const [movies, setMovies] = useState<Array<Movie>>();
   const [searchTerm, setSearchTerm] = useState(DEFAULT_MOVIE_SEARCH);
   const [page, setPage] = useState(1);
+  console.log(movies)
+
 
   useEffect(() => {
     fetch(

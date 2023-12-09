@@ -1,71 +1,60 @@
 import {
-  Container,
   Pagination,
   Stack,
   Box,
-  Paper,
-  InputBase,
-  IconButton,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 
-import useMoviesData from "../../hooks/useMoviesData";
 import MovieCard from "../../components/ui/MovieCard";
+import useMoviesStore from "../../store/MovieStore";
 
-const MAX_PAGE = 100;
 
 export default function Home() {
-  const { movies, page, setPage, setSearchTerm, searchTerm } = useMoviesData();
-  console.log("Movies", movies);
 
-  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+  const movies = useMoviesStore(state => state.movies);
+  const page = useMoviesStore(state => state.page);
+  const maxPage = useMoviesStore(state => state.maxPage);
+  const setPage = useMoviesStore(state => state.setPage)
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-  };
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+  }
 
   return (
-    <Container maxWidth="lg">
-      <Paper
-        component="form"
-        sx={{
-          p: "2px 4px",
-          display: "flex",
-          alignItems: "center",
-          width: 400,
-          margin: "auto",
-        }}
-      >
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Filter by Title"
-          inputProps={{ "aria-label": "Filter by Title" }}
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
-      <div>
-        <Stack direction="row" spacing={2} useFlexGap flexWrap="wrap">
+    <>
+      <section>
+
+        <Stack
+          className="w-full"
+          flexWrap="wrap"
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={3}
+        >
           {movies
             ? movies.map((movie) => (
-                <Box sx={{ height: "20rem", width: "20rem" }}>
-                  <MovieCard movie={movie} key={movie.imdbID} />
-                </Box>
-              ))
-            : `Movie with title  ${searchTerm} not found`}
+              <Box sx={{ height: "20rem", width: "20rem" }} key={movie.imdbID}>
+                <MovieCard movie={movie} card={false} />
+              </Box>
+            ))
+            : <p className="text-4xl mt-20 text-red-600">Movie not found, please write the name again</p>}
         </Stack>
+
+
+      </section>
+
+      <div className={`${!movies  ? 'mt-40' : ''} bg-white mt-4 p-4 flex justify-center w-full`}>
+
+        <Pagination
+
+          size="large"
+          color="primary"
+          page={page}
+          onChange={handlePageChange}
+          count={maxPage}
+        />
+
       </div>
-      <Pagination
-        color="primary"
-        page={page}
-        onChange={handlePageChange}
-        count={MAX_PAGE}
-      />
-    </Container>
+    </>
   );
 }

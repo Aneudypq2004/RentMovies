@@ -6,6 +6,7 @@ import NewAccount from "./pages/Auth/NewAccount";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ProtectedLayer from "./pages/ProtectedRoutes/ProtectedLayer";
 import Home from "./pages/ProtectedRoutes/Home";
+import Card from "./pages/ProtectedRoutes/Card";
 
 function App() {
   return (
@@ -22,11 +23,11 @@ function App() {
         <Route path="Forgot-Password" Component={ForgotPassword} />
       </Route>
 
-      {/* Protecte Routes  */}
+      {/* Protected Routes  */}
 
-      {/* <Route path='/home' Component={ProtectedLayer}> */}
-      <Route path="/home">
+      <Route path='/home' Component={ProtectedLayer}>
         <Route index Component={Home} />
+        <Route path="card" Component={Card} />
       </Route>
 
       <Route path="*" Component={P404} />

@@ -9,7 +9,7 @@ import {
 } from "@mui/material"
 
 import { useFormik } from "formik"
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import Nav from "../../components/LoginArea/Nav"
 import { useState } from "react"
 import { SignInSchema } from "../../libs/schemas"
@@ -20,6 +20,8 @@ export default function Login() {
   const [checked, setChecked] = useState(Boolean(localStorage.getItem("RememberEmail")) ?? false);
 
   const [Email, setEmail] = useState(localStorage.getItem("RememberEmail") ?? "");
+
+  const nav = useNavigate();
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -45,6 +47,7 @@ export default function Login() {
     // 
     onSubmit: (values) => {
 
+      nav("/home");
 
       if (checked) {
         localStorage.setItem("RememberEmail", values.email);
